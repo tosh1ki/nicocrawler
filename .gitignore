@@ -1,0 +1,8 @@
+*~
+__pycache__
+mysetup.py
+.cache/
+*.csv
+*.sqlite
+*.html
+.ipynb_checkpoints/*
