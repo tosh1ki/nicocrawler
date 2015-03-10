@@ -307,7 +307,7 @@ class NicoCrawler:
         df.ix[:, 'crawled'] = int(False)
         df.to_csv(csv_path)
 
-    def initialize_csv_from_url(self, url, csv_path='crawled.csv'):
+    def initialize_csv_from_url(self, url, csv_path='crawled.csv', max_page=1):
         '''daily rankingから取得
 
         `so11111111` のような形式の動画idの動画は，getflv周りで
@@ -322,15 +322,24 @@ class NicoCrawler:
 
         Example
         ============
-        >>> url = 'http://www.nicovideo.jp/ranking/fav/daily/anime'
+        >>> url = 'http://www.nicovideo.jp/ranking/fav/daily/all'
         >>> ncrawler.initialize_csv_from_url(url)
         '''
-        html = self.get_html_text(url)
 
-        # sm111111 の形式のURLだけ抜き出す
-        video_list = re.findall('"watch/(sm\d+)"[^>]+>([^<]+)<', html)
+        df_list = []
 
-        df = pd.DataFrame(video_list, columns=['thread', 'title'])
+        for page in range(1, max_page+1):
+            url_page = url + ('?page={0}'.format(page))
+            html = self.get_html_text(url_page)
+            
+            # sm111111 の形式のURLだけ抜き出す
+            video_list = re.findall('"watch/(sm\d+)"[^>]+>([^<]+)<', html)
+
+            df_temp = pd.DataFrame(video_list, columns=['thread', 'title'])
+            df_list.append(df_temp)
+        
+        df = pd.concat(df_list, ignore_index=True)
+        
         df.ix[:, 'crawled'] = 0
         df.to_csv(csv_path)
 

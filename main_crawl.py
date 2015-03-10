@@ -11,15 +11,14 @@ from NicoCrawler import NicoCrawler
 
 if __name__ == '__main__':
 
-    sqlite_path = 'nico-comments.sqlite'
+    sqlite_path = '/mnt/subdisk/data/deanony/nico-all.sqlite'
     csv_path = 'crawled.csv'
 
     ncrawler = NicoCrawler()
     ncrawler.connect_sqlite(sqlite_path)
 
-    # 「アニメ」カテゴリのデイリーランキング上位100位の動画のうち，
-    # 公式アニメで無いものを取得する
-    url = 'http://www.nicovideo.jp/ranking/fav/daily/anime'
-    ncrawler.initialize_csv_from_url(url, csv_path)
+    # デイリーランキング1~300位の動画を取得する
+    url = 'http://www.nicovideo.jp/ranking/fav/daily/all'
+    ncrawler.initialize_csv_from_url(url, csv_path, max_page=3)
 
     ncrawler.get_all_comments_of_csv(csv_path, max_n_iter=1)
