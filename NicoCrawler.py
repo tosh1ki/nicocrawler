@@ -340,7 +340,8 @@ class NicoCrawler:
         
         df = pd.concat(df_list, ignore_index=True)
         
-        df.ix[:, 'crawled'] = 0
+        df.ix[:, 'crawled_twi'] = 0
+        df.ix[:, 'crawled_nico'] = 0
         df.to_csv(csv_path)
 
     def get_all_comments_of_csv(self, csv_path, max_n_iter=1000):
