@@ -1,10 +1,6 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-__author__ = 'tosh1ki'
-__email__ = 'tosh1ki@yahoo.co.jp'
-__date__ = '2015-03-03'
-
 
 import argparse
 
