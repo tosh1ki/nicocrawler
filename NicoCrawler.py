@@ -283,7 +283,7 @@ class NicoCrawler:
 
         >>> ncrawler.get_all_comments_of_video_db()
         '''
-        df = pd.read_sql('select * from videos;', self.con)
+        df = pd.read_sql('SELECT * FROM videos;', self.con)
 
         for n, d in df.T.to_dict().items():
             print(d['title'])
@@ -303,7 +303,7 @@ class NicoCrawler:
         csv_path : string
             CSVの出力先
         '''
-        df = pd.read_sql('select * from videos;', self.con)
+        df = pd.read_sql('SELECT * FROM videos;', self.con)
         df.ix[:, 'crawled'] = int(False)
         df.to_csv(csv_path)
 
