@@ -25,7 +25,7 @@ if __name__ == '__main__':
 
     url = 'http://ch.nicovideo.jp/2015spring_anime'
     df = ncrawler.get_all_video_url_of_season(url)
-    ncrawler.initialize_csv_from_db('crawled.csv')
+    ncrawler.initialize_csv_from_db(csv_path)
 
     # # デイリーランキング1~300位の動画を取得する
     # url = 'http://www.nicovideo.jp/ranking/fav/daily/all'
