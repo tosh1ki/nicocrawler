@@ -4,7 +4,7 @@
 
 import argparse
 
-from NicoCrawler import NicoCrawler
+from nicocrawler.nicocrawler import NicoCrawler
 
 
 if __name__ == '__main__':
