@@ -6,9 +6,10 @@ __doc__ = '''
 Crawl comment from nicovideo.jp
 
 Usage:
-    crawl_comments.py --mail <mail> --pass <pass> [--sqlite <sqlite>] [--csv <csv>]
+    crawl_comments.py --url <url> --mail <mail> --pass <pass> [--sqlite <sqlite>] [--csv <csv>]
 
 Options:
+    --url <url>
     --mail <mail>
     --pass <pass>
     --sqlite <sqlite>       (optional) path of comment DB [default: comments.sqlite3]
@@ -25,16 +26,16 @@ if __name__ == '__main__':
 
     # コマンドライン引数の取得
     args = docopt(__doc__)
-    path_sqlite = args['--sqlite']
-    path_csv = args['--csv']
+    url_channel_toppage = args['--url']
     login_mail = args['--mail']
     login_pass = args['--pass']
+    path_sqlite = args['--sqlite']
+    path_csv = args['--csv']
 
     ncrawler = NicoCrawler(login_mail, login_pass)
     ncrawler.connect_sqlite(path_sqlite)
 
-    url = 'http://ch.nicovideo.jp/2016winter_anime'
-    df = ncrawler.get_all_video_url_of_season(url)
+    df = ncrawler.get_all_video_url_of_season(url_channel_toppage)
     ncrawler.initialize_csv_from_db(path_csv)
 
     # # デイリーランキング1~300位の動画を取得する
