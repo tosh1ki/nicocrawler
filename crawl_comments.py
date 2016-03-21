@@ -6,11 +6,13 @@ __doc__ = '''
 Crawl comment from nicovideo.jp
 
 Usage:
-    crawl_comments.py [--sqlite <sqlite>] [--csv <csv>]
+    crawl_comments.py --mail <mail> --pass <pass> [--sqlite <sqlite>] [--csv <csv>]
 
 Options:
-    --sqlite <sqlite>  (optional) path of comment DB [default: comments.sqlite3]
-    --csv <csv>        (optional) path of csv file contains urls of videos [default: crawled.csv]
+    --mail <mail>
+    --pass <pass>
+    --sqlite <sqlite>       (optional) path of comment DB [default: comments.sqlite3]
+    --csv <csv>             (optional) path of csv file contains urls of videos [default: crawled.csv]
 '''
 
 
