@@ -23,18 +23,18 @@ if __name__ == '__main__':
 
     # コマンドライン引数の取得
     args = docopt(__doc__)
-    sqlite_path = args['--sqlite']
-    csv_path = args['--csv']
+    path_sqlite = args['--sqlite']
+    path_csv = args['--csv']
 
     ncrawler = NicoCrawler()
-    ncrawler.connect_sqlite(sqlite_path)
+    ncrawler.connect_sqlite(path_sqlite)
 
     url = 'http://ch.nicovideo.jp/2016winter_anime'
     df = ncrawler.get_all_video_url_of_season(url)
-    ncrawler.initialize_csv_from_db(csv_path)
+    ncrawler.initialize_csv_from_db(path_csv)
 
     # # デイリーランキング1~300位の動画を取得する
     # url = 'http://www.nicovideo.jp/ranking/fav/daily/all'
-    # ncrawler.initialize_csv_from_url(url, csv_path, max_page=3)
+    # ncrawler.initialize_csv_from_url(url, path_csv, max_page=3)
 
-    # ncrawler.get_all_comments_of_csv(csv_path, max_n_iter=1)
+    # ncrawler.get_all_comments_of_csv(path_csv, max_n_iter=1)
