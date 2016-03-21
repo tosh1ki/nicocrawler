@@ -25,8 +25,10 @@ if __name__ == '__main__':
     args = docopt(__doc__)
     path_sqlite = args['--sqlite']
     path_csv = args['--csv']
+    login_mail = args['--mail']
+    login_pass = args['--pass']
 
-    ncrawler = NicoCrawler()
+    ncrawler = NicoCrawler(login_mail, login_pass)
     ncrawler.connect_sqlite(path_sqlite)
 
     url = 'http://ch.nicovideo.jp/2016winter_anime'

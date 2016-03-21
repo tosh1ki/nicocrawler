@@ -12,8 +12,6 @@ import xml.etree.ElementTree as et
 import pandas as pd
 import sqlite3
 
-import mysetup as my
-
 import pdb
 
 
@@ -26,9 +24,11 @@ class NicoCrawler:
     >>> ncrawler.connect_sqlite('test.sqlite')
     '''
 
-    def __init__(self, time_sleep=3, n_retry=10):
+    def __init__(self, login_mail, login_pass, time_sleep=3, n_retry=10):
         self.time_sleep = time_sleep
         self.n_retry = n_retry
+        self.login_mail = login_mail
+        self.login_pass = login_pass
 
         self.session = requests.session()
 
@@ -71,7 +71,12 @@ class NicoCrawler:
 
     def login(self):
         base_login = 'https://secure.nicovideo.jp/secure/login?site=niconico'
-        self.post_session(base_login, data=my.login_dict)
+        login_dict = {
+            'mail': self.login_mail,
+            'password': self.login_pass
+        }
+
+        self.post_session(base_login, data=login_dict)
 
     def connect_sqlite(self, filepath):
         self.con = sqlite3.connect(filepath)
