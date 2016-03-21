@@ -18,7 +18,7 @@ import pdb
 
 
 SLEEP_TIME = 3
-RETRY_MAX = 10
+N_RETRY = 10
 
 
 class NicoCrawler:
@@ -33,7 +33,7 @@ class NicoCrawler:
     def __init__(self):
         self.session = requests.session()
 
-        adapter = requests.adapters.HTTPAdapter(max_retries=RETRY_MAX)
+        adapter = requests.adapters.HTTPAdapter(max_retries=N_RETRY)
         self.session.mount("http://", adapter)
         self.session.mount("https://", adapter)
 
@@ -42,7 +42,7 @@ class NicoCrawler:
     def get_session(self, url, params={}):
         time.sleep(SLEEP_TIME)
 
-        for n in range(RETRY_MAX):
+        for n in range(N_RETRY):
             res = self.session.get(url, params=params)
 
             if res.status_code == 200:
@@ -51,12 +51,12 @@ class NicoCrawler:
             print('retry (get_session)')
             time.sleep(10*n*SLEEP_TIME)
         else:
-            sys.exit('Exceeded RETRY_MAX (NicoCrawler.get_sesion())')
+            sys.exit('Exceeded N_RETRY (NicoCrawler.get_sesion())')
 
     def post_session(self, url, data):
         time.sleep(SLEEP_TIME)
 
-        for n in range(RETRY_MAX):
+        for n in range(N_RETRY):
             res = self.session.post(url, data=data)
 
             if res.status_code == 200:
@@ -65,7 +65,7 @@ class NicoCrawler:
             print('retry (post_session)')
             time.sleep(10*n*SLEEP_TIME)
         else:
-            sys.exit('Exceeded RETRY_MAX (NicoCrawler.post_session())')
+            sys.exit('Exceeded N_RETRY (NicoCrawler.post_session())')
 
     def login(self):
         base_login = 'https://secure.nicovideo.jp/secure/login?site=niconico'
@@ -78,7 +78,7 @@ class NicoCrawler:
     def __get_key_base(self, url, _dict={}):
         '''waybackkey, threadkey, getflvのretry機能の部分の関数
         '''
-        for n in range(RETRY_MAX):
+        for n in range(N_RETRY):
             key = self.get_session(url, params=_dict)
 
             if not 'error' in key.text:
@@ -87,7 +87,7 @@ class NicoCrawler:
             print('retry (__get_key_base)')
             time.sleep(10*n*SLEEP_TIME)
         else:
-            sys.exit('Exceeded RETRY_MAX (NicoCrawler.__get_key_base())')
+            sys.exit('Exceeded N_RETRY (NicoCrawler.__get_key_base())')
 
     def get_waybackkey(self, _dict):
         base_waybackkey = 'http://flapi.nicovideo.jp/api/getwaybackkey?'
@@ -148,7 +148,7 @@ class NicoCrawler:
             'nicoru': 1,
         }
 
-        for n in range(RETRY_MAX):
+        for n in range(N_RETRY):
             url_get = self.__get_url(thread, flapi_dict, options)
             comments = self.get_session(url_get)
             
@@ -158,7 +158,7 @@ class NicoCrawler:
             print('retry (__get_comments)')
             time.sleep(10*n*SLEEP_TIME)
         else:
-            sys.exit('Exceeded RETRY_MAX (__get_comments)')
+            sys.exit('Exceeded N_RETRY (__get_comments)')
 
         return comments
 
