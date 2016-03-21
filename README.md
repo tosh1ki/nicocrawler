@@ -1,18 +1,15 @@
-NicoCrawler
+nicocrawler: ニコニコ動画のコメントを取得するクローラー
 ===========
-ニコニコ動画のコメントを取得するクローラー
+
+動作環境は Python 3.5.1 :: Anaconda 2.4.1 (64-bit)
 
 # Contents
 
 ## main_crawl.py
-NicoCrawlerを使って実際にクロールを行うスクリプト．
+NicoCrawler を使って実際にクロールを行うスクリプト．
 
-Python3.4.2で作成．
-
-## NicoCrawler.py
-nicovideo.jpをクロールするためのクラスなどが入っている．
-
-Python3.4.2で作成．
+## nicocrawler/nicocrawler.py
+nicovideo.jp をクロールするためのクラスなどが入っている．
 
 ## mysetup.py
 `mysetup.py` には以下の形式でnicovideo.jpのログインに使うメールアドレスとパスワードを入れておく．
@@ -27,7 +24,3 @@ login_dict = {
 
 - [ニコニコ動画:GINZA](http://www.nicovideo.jp/video_top)
 - [niconicoのメッセージ(コメント)サーバーのタグや送り方の説明 - 神の味噌汁青海](http://blog.goo.ne.jp/hocomodashi/e/3ef374ad09e79ed5c50f3584b3712d61)
-
-# Author
-
-[tosh1ki](https://github.com/tosh1ki)
