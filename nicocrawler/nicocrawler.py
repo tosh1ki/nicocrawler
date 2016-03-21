@@ -38,8 +38,11 @@ class NicoCrawler:
 
         self.login()
 
+    def __wait(self, times=1):
+        time.sleep(times * self.time_sleep)
+
     def get_session(self, url, params={}):
-        time.sleep(self.time_sleep)
+        self.__wait()
 
         for n in range(self.n_retry):
             res = self.session.get(url, params=params)
@@ -48,12 +51,12 @@ class NicoCrawler:
                 return res
 
             print('retry (get_session)')
-            time.sleep(10*n*self.time_sleep)
+            self.__wait(times=10*n)
         else:
             sys.exit('Exceeded self.n_retry (NicoCrawler.get_sesion())')
 
     def post_session(self, url, data):
-        time.sleep(self.time_sleep)
+        self.__wait()
 
         for n in range(self.n_retry):
             res = self.session.post(url, data=data)
@@ -62,7 +65,7 @@ class NicoCrawler:
                 return res
 
             print('retry (post_session)')
-            time.sleep(10*n*self.time_sleep)
+            self.__wait(times=10*n)
         else:
             sys.exit('Exceeded self.n_retry (NicoCrawler.post_session())')
 
@@ -84,7 +87,7 @@ class NicoCrawler:
                 return key
 
             print('retry (__get_key_base)')
-            time.sleep(10*n*self.time_sleep)
+            self.__wait(times=10*n)
         else:
             sys.exit('Exceeded self.n_retry (NicoCrawler.__get_key_base())')
 
@@ -155,7 +158,7 @@ class NicoCrawler:
                 break
                 
             print('retry (__get_comments)')
-            time.sleep(10*n*self.time_sleep)
+            self.__wait(times=10*n)
         else:
             sys.exit('Exceeded self.n_retry (__get_comments)')
 
