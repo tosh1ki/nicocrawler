@@ -105,7 +105,7 @@ class NicoCrawler:
         '''urlが指定するページのhtmlを取得して返す
         '''
         res = self.get_session(url)
-        return res.text.encode('ISO-8859-1').decode('utf-8')
+        return res.text
 
     def __get_url(self, thread, flapi_dict, options):
         getflv = self.get_getflv(thread)
