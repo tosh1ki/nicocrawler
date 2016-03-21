@@ -12,13 +12,7 @@ import xml.etree.ElementTree as et
 import pandas as pd
 import sqlite3
 
-import mysetup as my
-
 import pdb
-
-
-SLEEP_TIME = 3
-RETRY_MAX = 10
 
 
 class NicoCrawler:
@@ -30,46 +24,59 @@ class NicoCrawler:
     >>> ncrawler.connect_sqlite('test.sqlite')
     '''
 
-    def __init__(self):
+    def __init__(self, login_mail, login_pass, time_sleep=3, n_retry=10):
+        self.time_sleep = time_sleep
+        self.n_retry = n_retry
+        self.login_mail = login_mail
+        self.login_pass = login_pass
+
         self.session = requests.session()
 
-        adapter = requests.adapters.HTTPAdapter(max_retries=RETRY_MAX)
+        adapter = requests.adapters.HTTPAdapter(max_retries=self.n_retry)
         self.session.mount("http://", adapter)
         self.session.mount("https://", adapter)
 
         self.login()
 
-    def get_session(self, url, params={}):
-        time.sleep(SLEEP_TIME)
+    def __wait(self, times=1):
+        time.sleep(times * self.time_sleep)
 
-        for n in range(RETRY_MAX):
+    def get_session(self, url, params={}):
+        self.__wait()
+
+        for n in range(self.n_retry):
             res = self.session.get(url, params=params)
 
             if res.status_code == 200:
                 return res
 
             print('retry (get_session)')
-            time.sleep(10*n*SLEEP_TIME)
+            self.__wait(times=10*n)
         else:
-            sys.exit('Exceeded RETRY_MAX (NicoCrawler.get_sesion())')
+            sys.exit('Exceeded self.n_retry (NicoCrawler.get_sesion())')
 
     def post_session(self, url, data):
-        time.sleep(SLEEP_TIME)
+        self.__wait()
 
-        for n in range(RETRY_MAX):
+        for n in range(self.n_retry):
             res = self.session.post(url, data=data)
 
             if res.status_code == 200:
                 return res
 
             print('retry (post_session)')
-            time.sleep(10*n*SLEEP_TIME)
+            self.__wait(times=10*n)
         else:
-            sys.exit('Exceeded RETRY_MAX (NicoCrawler.post_session())')
+            sys.exit('Exceeded self.n_retry (NicoCrawler.post_session())')
 
     def login(self):
         base_login = 'https://secure.nicovideo.jp/secure/login?site=niconico'
-        self.post_session(base_login, data=my.login_dict)
+        login_dict = {
+            'mail': self.login_mail,
+            'password': self.login_pass
+        }
+
+        self.post_session(base_login, data=login_dict)
 
     def connect_sqlite(self, filepath):
         self.con = sqlite3.connect(filepath)
@@ -78,16 +85,16 @@ class NicoCrawler:
     def __get_key_base(self, url, _dict={}):
         '''waybackkey, threadkey, getflvのretry機能の部分の関数
         '''
-        for n in range(RETRY_MAX):
+        for n in range(self.n_retry):
             key = self.get_session(url, params=_dict)
 
             if not 'error' in key.text:
                 return key
 
             print('retry (__get_key_base)')
-            time.sleep(10*n*SLEEP_TIME)
+            self.__wait(times=10*n)
         else:
-            sys.exit('Exceeded RETRY_MAX (NicoCrawler.__get_key_base())')
+            sys.exit('Exceeded self.n_retry (NicoCrawler.__get_key_base())')
 
     def get_waybackkey(self, _dict):
         base_waybackkey = 'http://flapi.nicovideo.jp/api/getwaybackkey?'
@@ -105,7 +112,7 @@ class NicoCrawler:
         '''urlが指定するページのhtmlを取得して返す
         '''
         res = self.get_session(url)
-        return res.text.encode('ISO-8859-1').decode('utf-8')
+        return res.text
 
     def __get_url(self, thread, flapi_dict, options):
         getflv = self.get_getflv(thread)
@@ -148,7 +155,7 @@ class NicoCrawler:
             'nicoru': 1,
         }
 
-        for n in range(RETRY_MAX):
+        for n in range(self.n_retry):
             url_get = self.__get_url(thread, flapi_dict, options)
             comments = self.get_session(url_get)
             
@@ -156,9 +163,9 @@ class NicoCrawler:
                 break
                 
             print('retry (__get_comments)')
-            time.sleep(10*n*SLEEP_TIME)
+            self.__wait(times=10*n)
         else:
-            sys.exit('Exceeded RETRY_MAX (__get_comments)')
+            sys.exit('Exceeded self.n_retry (__get_comments)')
 
         return comments
 
