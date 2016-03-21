@@ -3,6 +3,7 @@ __pycache__
 mysetup.py
 .cache/
 *.csv
-*.sqlite
+*.sqlite3
 *.html
 .ipynb_checkpoints/*
+.python-version
