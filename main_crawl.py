@@ -2,23 +2,29 @@
 # -*- coding: utf-8 -*-
 
 
-import argparse
+__doc__ = '''
+Crawl comment from nicovideo.jp
+
+Usage:
+    main_crawl.py [--sqlite <sqlite>] [--csv <csv>]
+
+Options:
+    --sqlite <sqlite>  (optional) path of comment DB [default: comments.sqlite3]
+    --csv <csv>        (optional) path of csv file contains urls of videos [default: crawled.csv]
+'''
+
+
+from docopt import docopt
 
 from nicocrawler.nicocrawler import NicoCrawler
 
 
 if __name__ == '__main__':
 
-    parser = argparse.ArgumentParser()
-    parser.add_argument('-s', '--sqlite_path',
-                        default='comments.sqlite3',
-                        help='クロールしたデータを保存するSQLiteの場所')
-    parser.add_argument('-c', '--csv_path',
-                        default='crawled.csv',
-                        help='クロールする予定のURLを集めたCSV')
-    args = parser.parse_args()
-    sqlite_path = args.sqlite_path
-    csv_path = args.csv_path
+    # コマンドライン引数の取得
+    args = docopt(__doc__)
+    sqlite_path = args['--sqlite']
+    csv_path = args['--csv']
 
     ncrawler = NicoCrawler()
     ncrawler.connect_sqlite(sqlite_path)
